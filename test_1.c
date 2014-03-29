@@ -13,7 +13,6 @@ union number{
 	*((type *) tem) = *((type *) a); \
 	*((type *) a) = *((type *) b); \
 	*((type *) b) = *((type *) tem);
-
 void swap(void *_a, void *_b, int size)
 {
 	if(size==4)
@@ -44,6 +43,7 @@ int descend(void *a, void *b)
 	}
 }
 
+/* TODO: reimplement using quicksort */
 void bubble(void *_array, int (*compare)(void *a, void *b), int size)
 {
 	int i, j;
@@ -53,7 +53,8 @@ void bubble(void *_array, int (*compare)(void *a, void *b), int size)
 	for(j=0;j<num-1;j++)
 	{
 		for(i=0;i<num-1;i++)
-		{			
+		{	
+			/* FIXME: simplify the following code */		
 			if((*compare)( _array + size*i, _array + size*(i+1)))
 			{
 				swap( _array + size*i, _array + size*(i+1), size );
