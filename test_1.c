@@ -1,52 +1,87 @@
-int array[10]={1 ,2, 3, 4, 5, 55, 8512, 151, 6161, 879};
+double array[10]={1 ,2, 3, 4, 5, 55, 8512, 151, 6161, 879};
 int num = sizeof(array) / sizeof(array[0]);
-int offset =  sizeof(array[0]);
-int (*compare)(int *a, int *b);
+int (*compare)(void *a, void *b);
 
-void swap(int *_a, int *_b)
+union number{
+	int inte;
+	double doub;
+};
+
+void swap(void *_a, void *_b, int size)
 {
-	int c;
-	int *tem = &c;
-
-	*tem = *_a;
-	*_a = *_b;
-	*_b = *tem;	
-}
-
-int ascend(int *a, int *b)
-{
-	return *a > *b;
-}
-
-int descend(int *a, int *b)
-{
-	return *b > *a;
-}
-
-void bubble(int _array[], int (*compare)(int *a, int *b))
-{
-	int i, j, tem;
+	if(size==4)
+	{
+		int c;
+		void *tem = &c;
 	
+		*((int *)tem) = *((int *)_a);
+		*((int *)_a) = *((int *)_b);
+		*((int *)_b) = *((int *)tem);
+	}else if(size==8)
+	{
+		double d;
+		void *tem = &d;
+
+		*((double *)tem) = *((double *)_a);
+		*((double *)_a) = *((double *)_b);
+		*((double *)_b) = *((double *)tem);
+	}
+}
+
+int ascend(void *a, void *b)
+{
+	if(sizeof(array[0])==4){
+		return *((int*)a) > *((int*)b);	
+	}else if(sizeof(array[0])==8){
+		return *((double*)a) > *((double*)b);
+	}
+}
+
+int descend(void *a, void *b)
+{
+	if(sizeof(array[0])==4){
+		return *((int*)a) < *((int*)b);	
+	}else if(sizeof(array[0])==8){
+		return *((double*)a) < *((double*)b);
+	}
+}
+
+void bubble(void *_array, int (*compare)(void *a, void *b), int size)
+{
+	int i, j;
+	union number *value;
+	value = _array;
+
 	for(j=0;j<num-1;j++)
 	{
 		for(i=0;i<num-1;i++)
 		{			
-			if((*compare)( &_array[i], &_array[i+1] ))
+			if((*compare)( _array + size*i, _array + size*(i+1)))
 			{
-				swap( &_array[i], &_array[i+1] );
+				swap( _array + size*i, _array + size*(i+1), size );
 			}
 		}
 	}
 
-	for(i = 0; i < num; i++)
-	{
-		printf("%d ", _array[i]);
-	}	
+	if(size==4){
+		for(i = 0; i < num; i++)
+		{
+			value->inte = *((int *)_array + i);
+			printf("%d ", value->inte );
+		}	
+	}else if(size==8){
+		for(i = 0; i < num; i++)
+		{
+			value->doub = *((double *)_array + i);
+			printf("%f ", value->doub );
+		}
+	}
+	
 	printf("\n");
 }
 
 int main()
 {
-	bubble(array, ascend);
-	bubble(array, descend);
+	bubble(&array, ascend, sizeof(array[0]));
+	bubble(&array, descend, sizeof(array[0]));
 }
