@@ -7,26 +7,24 @@ union number{
 	double doub;
 };
 
+#define SWAP_IMPL(type, a, b) \
+	int c; \
+	void *tem = &c; \
+	*((type *) tem) = *((type *) a); \
+	*((type *) a) = *((type *) b); \
+	*((type *) b) = *((type *) tem);
+
 void swap(void *_a, void *_b, int size)
 {
 	if(size==4)
 	{
-		int c;
-		void *tem = &c;
-	
-		*((int *)tem) = *((int *)_a);
-		*((int *)_a) = *((int *)_b);
-		*((int *)_b) = *((int *)tem);
+		SWAP_IMPL(int, _a, _b)
 	}else if(size==8)
 	{
-		double d;
-		void *tem = &d;
-
-		*((double *)tem) = *((double *)_a);
-		*((double *)_a) = *((double *)_b);
-		*((double *)_b) = *((double *)tem);
+		SWAP_IMPL(double, _a, _b)
 	}
 }
+#undef SWAP_IMPL
 
 int ascend(void *a, void *b)
 {
