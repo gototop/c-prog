@@ -1,7 +1,7 @@
 int array[10]={1 ,2, 3, 4, 5, 55, 8512, 151, 6161, 879};
 int num = sizeof(array) / sizeof(array[0]);
 int offset =  sizeof(array[0]);
-int (*compare)(int a, int b);
+int (*compare)(int *a, int *b);
 
 void swap(int *_a, int *_b)
 {
@@ -13,17 +13,17 @@ void swap(int *_a, int *_b)
 	*_b = *tem;	
 }
 
-int ascend(int a, int b)
+int ascend(int *a, int *b)
 {
-	return a > b;
+	return *a > *b;
 }
 
-int descend(int a, int b)
+int descend(int *a, int *b)
 {
-	return b > a;
+	return *b > *a;
 }
 
-void bubble(int _array[], int (*compare)(int a, int b))
+void bubble(int _array[], int (*compare)(int *a, int *b))
 {
 	int i, j, tem;
 	
@@ -31,7 +31,7 @@ void bubble(int _array[], int (*compare)(int a, int b))
 	{
 		for(i=0;i<num-1;i++)
 		{			
-			if((*compare)( _array[i], _array[i+1] ))
+			if((*compare)( &_array[i], &_array[i+1] ))
 			{
 				swap( &_array[i], &_array[i+1] );
 			}
