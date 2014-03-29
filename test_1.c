@@ -1,16 +1,29 @@
-int a[10]={1 ,2, 3, 4, 5, 55, 8512, 151, 6161, 879};
-int num = sizeof(a) / sizeof(a[0]);
+int array[10]={1 ,2, 3, 4, 5, 55, 8512, 151, 6161, 879};
+int num = sizeof(array) / sizeof(array[0]);
+int offset =  sizeof(array[0]);
+int (*compare)(int a, int b);
+
 void swap(int *_a, int *_b)
 {
-	int c;	
+	int c;
 	int *tem = &c;
-	
+
 	*tem = *_a;
 	*_a = *_b;
 	*_b = *tem;	
 }
 
-int main()
+int ascend(int a, int b)
+{
+	return a > b;
+}
+
+int descend(int a, int b)
+{
+	return b > a;
+}
+
+void bubble(int _array[], int (*compare)(int a, int b))
 {
 	int i, j, tem;
 	
@@ -18,18 +31,22 @@ int main()
 	{
 		for(i=0;i<num-1;i++)
 		{			
-			if(a[i]>a[i+1])
+			if((*compare)( _array[i], _array[i+1] ))
 			{
-				swap(&a[i], &a[i+1]);
+				swap( &_array[i], &_array[i+1] );
 			}
 		}
 	}
 
-	for(i=0;i<num;i++)
+	for(i = 0; i < num; i++)
 	{
-		printf("%d ", a[i]);
+		printf("%d ", _array[i]);
 	}	
-
 	printf("\n");
-	return 0;
+}
+
+int main()
+{
+	bubble(array, ascend);
+	bubble(array, descend);
 }
