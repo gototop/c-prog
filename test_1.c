@@ -16,7 +16,7 @@ int main()
 	
 	for(j=0;j<num-1;j++)
 	{
-		for(i=0;i<num;i++)
+		for(i=0;i<num-1;i++)
 		{			
 			if(a[i]>a[i+1])
 			{
